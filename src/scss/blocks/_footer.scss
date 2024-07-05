@@ -1,0 +1,10 @@
+.footer {
+    background-color: rgb(111, 141, 230);
+    padding: 100px 0;
+    font-size: 38px;
+    text-align: center;
+
+    @media (max-width: 900px) {
+        font-size: 2px;
+    }
+}
