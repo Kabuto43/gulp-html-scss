@@ -9,6 +9,35 @@ const sourceMaps = require('gulp-sourcemaps')
 const plumber = require('gulp-plumber')
 const notify = require('gulp-notify')
 
+const webpack = require('webpack-stream')
+const babel = require('gulp-babel')
+
+// Configs and Settings
+
+const fileIncludeSettings = {
+    prefix: '@@',
+    basepath: '@file'
+}
+
+const serverOptions = {
+    livereload: true,
+    open: true
+}
+
+// Functions 
+
+const plumberNotify = title => {
+    return {
+        errorHandler: notify.onError({
+            title: title,
+            message: 'Error: <%= error.message %>',
+            sound: true 
+        })
+    };
+}
+
+// Tasks
+
 gulp.task('clean', function (done) {
     if (fs.existsSync('./dist/')) {
         return gulp
@@ -18,39 +47,18 @@ gulp.task('clean', function (done) {
     done();
 })
 
-const fileIncludeSettings = {
-    prefix: '@@',
-    basepath: '@file'
-}
-
-const plumberHtmlConfig = {
-    errorHandler: notify.onError({
-        title: 'HTML',
-        message: 'Error: <%= error.message %>',
-        sound: true
-    })
-}
-
 gulp.task('html', function () {
     return gulp
         .src('./src/*.html')
-        .pipe(plumber(plumberHtmlConfig))
+        .pipe(plumber(plumberNotify('HTML')))
         .pipe(fileInclude(fileIncludeSettings))
         .pipe(gulp.dest('./dist/'))
 })
 
-const plumberSassConfig = {
-    errorHandler: notify.onError({
-        title: 'Styles',
-        message: 'Error: <%= error.message %>',
-        sound: true
-    })
-}
-
 gulp.task('sass', function () {
     return gulp
         .src('./src/scss/*.scss')
-        .pipe(plumber(plumberSassConfig))
+        .pipe(plumber(plumberNotify('SCSS')))
         .pipe(sourceMaps.init())
         .pipe(sass())
         // .pipe(groupMedia())
@@ -76,10 +84,14 @@ gulp.task('files', function () {
         .pipe(gulp.dest('./dist/files/'))
 })
 
-const serverOptions = {
-    livereload: true,
-    open: true
-}
+gulp.task('js', function () {
+    return gulp
+        .src('./src/js/*.js')
+        .pipe(plumber(plumberNotify('JS')))
+        .pipe(babel())
+        .pipe(webpack(require('./webpack.config.js')))
+        .pipe(gulp.dest('./dist/js/'))
+})
 
 gulp.task('server', function () {
     return gulp
@@ -93,10 +105,11 @@ gulp.task('watch', function () {
     gulp.watch('./src/img/**/*', gulp.parallel('images'))
     gulp.watch('./src/fonts/**/*', gulp.parallel('fonts'))
     gulp.watch('./src/files/**/*', gulp.parallel('files'))
+    gulp.watch('./src/js/**/*.js', gulp.parallel('js'))
 })
 
 gulp.task('default', gulp.series(
     'clean',
-    gulp.parallel('html', 'sass', 'images', 'fonts', 'files'),
+    gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js'),
     gulp.parallel('server', 'watch')
 ))
