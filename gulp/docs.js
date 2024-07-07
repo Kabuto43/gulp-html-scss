@@ -6,7 +6,7 @@ const server = require('gulp-server-livereload');
 const clean = require('gulp-clean');
 const fs = require('fs');
 const sourceMaps = require('gulp-sourcemaps');
-// const groupMedia = require('gulp-group-css-media-queries')
+const groupMedia = require('gulp-group-css-media-queries')
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 
@@ -67,8 +67,8 @@ gulp.task('sass:dev', function () {
         .pipe(plumber(plumberNotify('SCSS')))
         .pipe(sourceMaps.init())
         .pipe(sassGlob())
+        .pipe(groupMedia())
         .pipe(sass())
-        // .pipe(groupMedia())
         .pipe(sourceMaps.write())
         .pipe(gulp.dest('./build/css/'))
 })
