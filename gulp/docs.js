@@ -5,6 +5,7 @@ const fileInclude = require('gulp-file-include');
 const sass = require('gulp-sass')(require('sass'));
 const sassGlob = require('gulp-sass-glob');
 const autoprefixer = require('gulp-autoprefixer');
+const csso = require('gulp-csso')
 
 const server = require('gulp-server-livereload');
 const clean = require('gulp-clean');
@@ -74,6 +75,7 @@ gulp.task('sass:docs', function () {
         .pipe(sassGlob())
         .pipe(groupMedia())
         .pipe(sass())
+        .pipe(csso())
         .pipe(sourceMaps.write())
         .pipe(gulp.dest('./docs/css/'))
 })
