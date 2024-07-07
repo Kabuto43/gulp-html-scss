@@ -4,6 +4,8 @@
     font-size: 78px;
     text-align: center;
 
+    display: flex;
+
     @media (max-width: 1200px) {
         color: red;
         background-color: #378;
