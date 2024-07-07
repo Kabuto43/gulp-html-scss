@@ -19,6 +19,9 @@
     "gulp-sass-glob": "^1.1.0",
     "gulp-server-livereload": "^1.9.2",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-webp": "^4.0.1",
+    "gulp-webp-css": "^1.1.0",
+    "gulp-webp-html": "^1.0.2",
     "sass": "^1.77.6",
     "style-loader": "^4.0.0",
     "webpack-stream": "^7.0.0"
