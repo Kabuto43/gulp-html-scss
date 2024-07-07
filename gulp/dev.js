@@ -6,10 +6,8 @@ const server = require('gulp-server-livereload');
 const clean = require('gulp-clean');
 const fs = require('fs');
 const sourceMaps = require('gulp-sourcemaps');
-// const groupMedia = require('gulp-group-css-media-queries')
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
-
 const webpack = require('webpack-stream');
 const babel = require('gulp-babel');
 const imagemin = require('gulp-imagemin');
@@ -68,7 +66,6 @@ gulp.task('sass:dev', function () {
         .pipe(sourceMaps.init())
         .pipe(sassGlob())
         .pipe(sass())
-        // .pipe(groupMedia())
         .pipe(sourceMaps.write())
         .pipe(gulp.dest('./build/css/'))
 })
@@ -77,7 +74,7 @@ gulp.task('images:dev', function () {
     return gulp
         .src('./src/img/**/*')
         .pipe(changed('./build/img/'))
-        .pipe(imagemin({ verbose: true }))
+        // .pipe(imagemin({ verbose: true }))
         .pipe(gulp.dest('./build/img/'))
 })
 
@@ -100,7 +97,7 @@ gulp.task('js:dev', function () {
         .src('./src/js/*.js')
         .pipe(changed('./build/js/'))
         .pipe(plumber(plumberNotify('JS')))
-        .pipe(babel())
+        // .pipe(babel())
         .pipe(webpack(require('./../webpack.config.js')))
         .pipe(gulp.dest('./build/js/'))
 })
